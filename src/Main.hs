@@ -1,6 +1,7 @@
 module Main where
 
-import GameState (GameState, initialGameState)
+import Chess.GameState
+import Chess.TextUI.Board
 
 main :: IO ()
-main = print initialGameState
+main = displayBoard' 2 $ board initialGameState

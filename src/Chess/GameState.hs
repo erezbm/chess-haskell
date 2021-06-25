@@ -1,4 +1,4 @@
-module GameState (
+module Chess.GameState (
   Result,
   GameStatus,
   CastlingEligiblity,
@@ -11,14 +11,15 @@ module GameState (
   initialGameState,
 ) where
 
-import Board (Board, File, initialBoard)
-import Player (Player (Black, White))
+import Chess.Square
+import Chess.Board
+import Chess.Player
 
 data Result' = Tie' | Win' deriving (Show)
 
 data GameStatus' = GameInProgress' | GameOver' Result' deriving (Show)
 
-data CastlingEligiblity = NoneEligible | LeftEligible | RightEligible | BothEligible deriving (Show)
+data CastlingEligiblity = NoneEligible | QueenSideEligible | KingSideEligible | BothEligible deriving (Show)
 
 data GameState = GameState
   { board :: Board

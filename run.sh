@@ -1,2 +1,2 @@
-cd src
-stack runhaskell Main.hs
+stack build
+stack run

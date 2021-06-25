@@ -1,4 +1,4 @@
-module Player where
+module Chess.Player where
 
 data Player = White | Black deriving (Show)
 
