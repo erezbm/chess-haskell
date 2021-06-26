@@ -1,7 +1,7 @@
-module Chess.Board where
+module Chess.Core.Board where
 
-import Chess.Player
-import Chess.Square
+import Chess.Core.Player
+import Chess.Core.Square
 import Data.Array
 
 data PieceType = Pawn | Bishop | Rook | Knight | Queen | King deriving (Show)

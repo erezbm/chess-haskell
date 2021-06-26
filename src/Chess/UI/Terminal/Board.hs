@@ -1,8 +1,8 @@
-module Chess.TextUI.Board where
+module Chess.UI.Terminal.Board where
 
-import Chess.Board
-import Chess.Player
-import Chess.Square
+import Chess.Core.Board
+import Chess.Core.Player
+import Chess.Core.Square
 import Data.Foldable
 import Data.Function
 import Data.List

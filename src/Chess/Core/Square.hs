@@ -1,8 +1,8 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
-module Chess.Square where
+module Chess.Core.Square where
 
-import Chess.Player
+import Chess.Core.Player
 import Data.Array
 
 -- Rank (aka row) 1, File (aka column) 1 is the white rook on the white queens side
