@@ -8,40 +8,52 @@ import Data.Array
 -- Rank (aka row) 1, File (aka column) 1 is the white rook on the white queens side
 -- https://cdn.discordapp.com/attachments/518448953512165387/857713363139821608/unknown.png
 
-newtype Rank = Rank Int deriving (Eq, Ord, Enum, Ix, Show)
+newtype Rank = Rank {rankIndex :: Int} deriving (Eq, Ord, Enum, Ix, Show)
 
-newtype File = File Int deriving (Eq, Ord, Enum, Ix, Show)
+newtype File = File {fileIndex :: Int} deriving (Eq, Ord, Enum, Ix, Show)
 
 instance Bounded Rank where
-  minBound = mkRank 0
-  maxBound = mkRank 7
+  minBound = Rank 0
+  maxBound = Rank 7
 
 instance Bounded File where
-  minBound = mkFile 0
-  maxBound = mkFile 7
+  minBound = File 0
+  maxBound = File 7
 
 type Square = (Rank, File)
 
 mkRank :: Int -> Rank
-mkRank n
-  | 0 <= n && n <= 7 = Rank n
+mkRank index
+  | minBound <= rank && rank <= maxBound = rank
   | otherwise = error "mkRank: out of bounds"
+ where
+  rank = Rank index
 
 mkFile :: Int -> File
-mkFile n
-  | 0 <= n && n <= 7 = File n
+mkFile index
+  | minBound <= file && file <= maxBound = file
   | otherwise = error "mkFile: out of bounds"
+ where
+  file = File index
 
 mkSquare :: Rank -> File -> Square
 mkSquare = (,)
 
+squareRank :: Square -> Rank
+squareRank = fst
+
+squareFile :: Square -> File
+squareFile = snd
+
 allRanks :: [Rank]
-allRanks = [mkRank 0 .. mkRank 7]
+allRanks = [minBound .. maxBound]
 
 allFiles :: [File]
-allFiles = [mkFile 0 .. mkFile 7]
+allFiles = [minBound .. maxBound]
 
 rankToPlayer :: Rank -> Player
-rankToPlayer (Rank rankIndex)
-  | rankIndex <= 3 = White
+rankToPlayer rank
+  | rank <= maxWhiteRank = White
   | otherwise = Black
+ where
+  maxWhiteRank = mkRank $ (rankIndex minBound + rankIndex maxBound) `div` 2

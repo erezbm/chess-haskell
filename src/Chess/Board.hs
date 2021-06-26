@@ -12,29 +12,29 @@ data Piece = Piece {piecePlayer :: Player, pieceType :: PieceType} deriving (Sho
 data Board = Board (Array Square (Maybe Piece)) deriving (Show)
 
 getRankPieces :: Board -> Rank -> [(Square, Maybe Piece)]
-getRankPieces (Board a) rank = map (\square -> (square, a ! square)) $ range (mkSquare rank minBound, mkSquare rank maxBound)
+getRankPieces (Board a) rank = filter ((== rank) . squareRank . fst) $ assocs a
 
 getFilePieces :: Board -> File -> [(Square, Maybe Piece)]
-getFilePieces (Board a) file = map (\square -> (square, a ! square)) $ range (mkSquare minBound file, mkSquare maxBound file)
+getFilePieces (Board a) file = filter ((== file) . squareFile . fst) $ assocs a
 
 initialBoard :: Board
-initialBoard = Board $ array (bottomLeft, topRight) positions
+initialBoard = Board $ array (minBound, maxBound) positions
  where
-  bottomLeft = (mkRank 0, mkFile 0)
-  topRight = (mkRank 7, mkFile 7)
-
   positions :: [(Square, Maybe Piece)]
   positions = do
-    (rank, rankIndex) <- zip ranks (map mkRank [0 ..])
-    (piece, fileIndex) <- zip rank (map mkFile [0 ..])
-    return ((rankIndex, fileIndex), piece)
+    (rankPieces, rank) <- zip ranksPieces allRanks
+    (piece, file) <- zip rankPieces allFiles
+    return (mkSquare rank file, piece)
 
-  ranks :: [[Maybe Piece]]
-  ranks = [edgeRank White, nearEdgeRank White] ++ replicate 4 emptyRank ++ [nearEdgeRank Black, edgeRank Black]
+  ranksPieces :: [[Maybe Piece]]
+  ranksPieces =
+    [edgeRankPieces White, nearEdgeRankPieces White]
+      ++ replicate (length allRanks - 4) emptyRankPieces
+      ++ [nearEdgeRankPieces Black, edgeRankPieces Black]
 
-  edgeRank, nearEdgeRank :: Player -> [Maybe Piece]
-  edgeRank player = map (Just . Piece player) [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
-  nearEdgeRank player = replicate 8 $ Just (Piece player Pawn)
+  edgeRankPieces, nearEdgeRankPieces :: Player -> [Maybe Piece]
+  edgeRankPieces player = map (Just . Piece player) [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
+  nearEdgeRankPieces player = replicate (length allFiles) $ Just (Piece player Pawn)
 
-  emptyRank :: [Maybe Piece]
-  emptyRank = replicate 8 Nothing
+  emptyRankPieces :: [Maybe Piece]
+  emptyRankPieces = replicate (length allFiles) Nothing
