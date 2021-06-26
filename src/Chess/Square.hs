@@ -50,10 +50,3 @@ allRanks = [minBound .. maxBound]
 
 allFiles :: [File]
 allFiles = [minBound .. maxBound]
-
-rankToPlayer :: Rank -> Player
-rankToPlayer rank
-  | rank <= maxWhiteRank = White
-  | otherwise = Black
- where
-  maxWhiteRank = mkRank $ (rankIndex minBound + rankIndex maxBound) `div` 2
