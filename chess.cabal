@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c800feecf32c75eafcedeb3bfa941968e431626b9296927415eecea01a5f9e13
+-- hash: 635e344374a448119d0fcb8efc4921f7778b7fa82fad70aa089329dabdde094e
 
 name:           chess
 version:        0.1.0.0
@@ -20,6 +20,8 @@ executable chess
       Chess.Core.Player
       Chess.Core.Square
       Chess.UI.Terminal.Board
+      Chess.UI.Terminal.Piece
+      Chess.UI.Terminal.Player
       Paths_chess
   hs-source-dirs:
       src
