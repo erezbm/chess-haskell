@@ -1,12 +1,12 @@
 module Chess.UI.Terminal.Piece (mbPieceChunk) where
 
-import Chess.Core.Board
+import Chess.Core.Piece
 import Chess.Core.Player
+import Chess.UI.Terminal.Player
 import Data.Char
 import Data.Function
 import Data.String
 import Rainbow
-import Chess.UI.Terminal.Player
 
 mbPieceChunk :: Bool -> Maybe Piece -> Chunk
 mbPieceChunk isAscii = maybe " " (pieceChunk isAscii)

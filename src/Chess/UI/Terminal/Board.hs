@@ -1,6 +1,7 @@
 module Chess.UI.Terminal.Board where
 
 import Chess.Core.Board
+import Chess.Core.Piece
 import Chess.Core.Square
 import Chess.UI.Terminal.Piece
 import Data.Foldable
@@ -32,10 +33,10 @@ tilesToRankChunks = RankChunks . transpose
 displayRankChunks :: RankChunks -> IO ()
 displayRankChunks (RankChunks chunks) = traverse_ putChunksLn chunks
 
-displayBoard' :: Bool -> Int -> Board -> IO ()
-displayBoard' isAscii size board = for_ (reverse allRanks) displayRank'
+displayBoard :: Bool -> Int -> Board -> IO ()
+displayBoard isAscii size board = for_ (reverse allRanks) displayRank
  where
-  displayRank' rank = displayRankChunks $ tilesToRankChunks tileChunks
+  displayRank rank = displayRankChunks $ tilesToRankChunks tileChunks
    where
     rowChunks = map (\(square, mbPiece) -> TileDisplay (squareTileColor square) mbPiece) (getRankPieces board rank)
     tileChunks = map (tileToChunks isAscii size) rowChunks
@@ -52,8 +53,8 @@ rankTileColors rank = map (squareTileColor . mkSquare rank) allFiles
 ----------------------------------------------------------------------------------------------------------------------
 -- Erez
 
-displayBoard :: Bool -> Int -> Board -> IO ()
-displayBoard isAscii size board = for_ (reverse allRanks) displayRank
+displayBoard' :: Bool -> Int -> Board -> IO ()
+displayBoard' isAscii size board = for_ (reverse allRanks) displayRank
  where
   displayRank :: Rank -> IO ()
   displayRank rank = for_ (emptyRowChunks ++ [rowChunks True] ++ emptyRowChunks) putChunksLn

@@ -1,12 +1,9 @@
 module Chess.Core.Board where
 
+import Chess.Core.Piece
 import Chess.Core.Player
 import Chess.Core.Square
 import Data.Array
-
-data PieceType = Pawn | Bishop | Rook | Knight | Queen | King deriving (Show)
-
-data Piece = Piece {piecePlayer :: Player, pieceType :: PieceType} deriving (Show)
 
 {-# ANN Board ("HLint: ignore Use newtype instead of data" :: String) #-}
 data Board = Board (Array Square (Maybe Piece)) deriving (Show)
