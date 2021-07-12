@@ -3,9 +3,7 @@
 module Chess.UI.Terminal.GameLoop where
 
 import Chess.Core.GameLogic
-import Chess.Core.GameState
-import Chess.Core.Move
-import Chess.Core.Square
+import Chess.Core.Models
 import Chess.UI.Terminal.Board
 import Data.Char
 import System.IO

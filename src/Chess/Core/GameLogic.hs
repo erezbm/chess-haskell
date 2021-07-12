@@ -1,42 +1,24 @@
 module Chess.Core.GameLogic where
 
-import Chess.Core.GameState
-import Chess.Core.Move
-import Chess.Core.Piece
-import Chess.Core.Player
+import Chess.Core.Models
+import Chess.Core.MoveConstraints.ValidMoves
+import Control.Monad
+import Data.Function
+import Data.Maybe
+import Utils
 
 applyMove :: Move -> GameState -> Maybe GameState
-applyMove move gameState = undefined
+applyMove move@(Move source dest) gameState = do
+  let possibleDests = possibleDestSquares gameState source
+  boolToMaybe (dest `elem` possibleDests) $ applyMove' move gameState
 
-data SquareOffset = SquareOffset {rankOffset :: Int, fileOffset :: Int}
+possibleDestSquares :: GameState -> Square -> [Square]
+possibleDestSquares gameState source = do
+  piece <- getPiece source (board gameState) & maybeToList
+  guard $ piecePlayer piece == turn gameState
+  allSquares
+    & validMovesMoveConstraint source piece
+    & undefined
 
-data Repeatability = Once | Many
-
-data PieceOffsets = PieceOffsets {pieceSquareOffsets :: [SquareOffset], repeatability :: Repeatability}
-
-getPieceMoves :: Piece -> PieceOffsets
-getPieceMoves (Piece player Pawn) = PieceOffsets{pieceSquareOffsets = [SquareOffset (1 * factor player) 0, SquareOffset (2 * factor player) 0], repeatability = Once}
- where
-  factor White = 1
-  factor Black = -1
-getPieceMoves (Piece _ pieceType) = getPieceMoves' pieceType
- where
-  getPieceMoves' Bishop = PieceOffsets{pieceSquareOffsets = diagonalOffsets, repeatability = Many}
-  getPieceMoves' Rook = PieceOffsets{pieceSquareOffsets = cardinalOffsets, repeatability = Many}
-  getPieceMoves' Knight = PieceOffsets{pieceSquareOffsets = knightOffsets, repeatability = Many}
-  getPieceMoves' Queen = PieceOffsets{pieceSquareOffsets = cardinalOffsets ++ diagonalOffsets, repeatability = Many}
-  getPieceMoves' King = PieceOffsets{pieceSquareOffsets = cardinalOffsets ++ diagonalOffsets, repeatability = Once}
-  getPieceMoves' Pawn = error "Pawn should be matched earlier"
-
-  cardinalOffsets = [SquareOffset 1 0, SquareOffset 0 1, SquareOffset (-1) 0, SquareOffset 0 (-1)]
-  diagonalOffsets = [SquareOffset 1 1, SquareOffset (-1) 1, SquareOffset (-1) (-1), SquareOffset 1 (-1)]
-  knightOffsets =
-    [ SquareOffset 2 1
-    , SquareOffset 1 2
-    , SquareOffset (-1) 2
-    , SquareOffset (-2) 1
-    , SquareOffset (-2) (-1)
-    , SquareOffset (-1) (-2)
-    , SquareOffset 1 (-2)
-    , SquareOffset 2 (-1)
-    ]
+applyMove' :: Move -> GameState -> GameState
+applyMove' = undefined

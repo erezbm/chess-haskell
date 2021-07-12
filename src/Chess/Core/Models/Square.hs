@@ -2,8 +2,10 @@
 
 module Chess.Core.Models.Square where
 
-import Chess.Core.Models.Player
+import Control.Applicative
 import Data.Array
+import Data.Maybe
+import Utils
 
 -- Rank (aka row) 1, File (aka column) 1 is the white rook on the white queens side
 -- https://cdn.discordapp.com/attachments/518448953512165387/857713363139821608/unknown.png
@@ -22,19 +24,17 @@ instance Bounded File where
 
 type Square = (Rank, File)
 
+mkMbRank :: Int -> Maybe Rank
+mkMbRank = filterMaybe (inRange (minBound, maxBound)) . Rank
+
+mkMbFile :: Int -> Maybe File
+mkMbFile = filterMaybe (inRange (minBound, maxBound)) . File
+
 mkRank :: Int -> Rank
-mkRank index
-  | minBound <= rank && rank <= maxBound = rank
-  | otherwise = error "mkRank: out of bounds"
- where
-  rank = Rank index
+mkRank = fromJust . mkMbRank
 
 mkFile :: Int -> File
-mkFile index
-  | minBound <= file && file <= maxBound = file
-  | otherwise = error "mkFile: out of bounds"
- where
-  file = File index
+mkFile = fromJust . mkMbFile
 
 mkSquare :: Rank -> File -> Square
 mkSquare = (,)
@@ -50,3 +50,6 @@ allRanks = [minBound .. maxBound]
 
 allFiles :: [File]
 allFiles = [minBound .. maxBound]
+
+allSquares :: [Square]
+allSquares = liftA2 mkSquare allRanks allFiles
