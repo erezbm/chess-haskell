@@ -1,7 +1,6 @@
 module Chess.UI.Terminal.Piece (mbPieceChunk) where
 
-import Chess.Core.Piece
-import Chess.Core.Player
+import Chess.Core.Models
 import Chess.UI.Terminal.Player
 import Data.Char
 import Data.Function

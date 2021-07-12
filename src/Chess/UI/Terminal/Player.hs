@@ -1,6 +1,6 @@
 module Chess.UI.Terminal.Player where
 
-import Chess.Core.Player
+import Chess.Core.Models
 import Rainbow
 
 playerRadiant :: Player -> Radiant

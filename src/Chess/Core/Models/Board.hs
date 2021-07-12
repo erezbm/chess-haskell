@@ -1,8 +1,8 @@
-module Chess.Core.Board where
+module Chess.Core.Models.Board where
 
-import Chess.Core.Piece
-import Chess.Core.Player
-import Chess.Core.Square
+import Chess.Core.Models.Piece
+import Chess.Core.Models.Player
+import Chess.Core.Models.Square
 import Data.Array
 
 {-# ANN Board ("HLint: ignore Use newtype instead of data" :: String) #-}
@@ -13,6 +13,9 @@ getRankPieces (Board a) rank = filter ((== rank) . squareRank . fst) $ assocs a
 
 getFilePieces :: Board -> File -> [(Square, Maybe Piece)]
 getFilePieces (Board a) file = filter ((== file) . squareFile . fst) $ assocs a
+
+getPiece :: Square -> Board -> Maybe Piece
+getPiece square (Board a) = a ! square
 
 initialBoard :: Board
 initialBoard = Board $ array (minBound, maxBound) positions

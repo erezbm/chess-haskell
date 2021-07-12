@@ -1,8 +1,6 @@
 module Chess.UI.Terminal.Board where
 
-import Chess.Core.Board
-import Chess.Core.Piece
-import Chess.Core.Square
+import Chess.Core.Models
 import Chess.UI.Terminal.Piece
 import Data.Foldable
 import Data.List

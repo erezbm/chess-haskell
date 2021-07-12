@@ -1,5 +1,5 @@
-module Chess.Core.Move where
+module Chess.Core.Models.Move where
 
-import Chess.Core.Square
+import Chess.Core.Models.Square
 
 data Move = Move { moveSource :: Square, moveDest :: Square } deriving (Show)

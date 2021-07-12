@@ -1,4 +1,4 @@
-module Chess.Core.GameState (
+module Chess.Core.Models.GameState (
   Result,
   GameStatus,
   CastlingEligiblity,
@@ -11,9 +11,9 @@ module Chess.Core.GameState (
   initialGameState,
 ) where
 
-import Chess.Core.Square
-import Chess.Core.Board
-import Chess.Core.Player
+import Chess.Core.Models.Square
+import Chess.Core.Models.Board
+import Chess.Core.Models.Player
 
 data Result' = Tie' | Win' deriving (Show)
 
