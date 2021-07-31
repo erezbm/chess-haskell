@@ -1,15 +1,14 @@
-module Chess.Core.MoveConstraints.ValidMoves where
+module Chess.Core.MoveConstraints.PieceOffsets (pieceOffsetsMC) where
 
 import Chess.Core.Models
 import Chess.Core.MoveConstraint
 import Data.Maybe
 import Utils
 
-validMovesMoveConstraint :: Square -> Piece -> MoveConstraint
-validMovesMoveConstraint source piece = filter (`elem` validDests source piece)
-
-validDests :: Square -> Piece -> [Square]
-validDests source piece = applyPieceOffsets (getPieceMoves piece) source
+pieceOffsetsMC :: Piece -> Square -> MoveConstraint
+pieceOffsetsMC piece source = filter (`elem` validDests)
+ where
+  validDests = applyPieceOffsets (getPieceOffsets piece) source
 
 applyPieceOffsets :: PieceOffsets -> Square -> [Square]
 applyPieceOffsets (PieceOffsets squareOffsets Once) source = catMaybes (($ source) . applySquareOffset <$> squareOffsets)
@@ -17,8 +16,8 @@ applyPieceOffsets (PieceOffsets squareOffsets Many) source = do
   offset <- squareOffsets
   generateList (applySquareOffset offset) source
 
-getPieceMoves :: Piece -> PieceOffsets
-getPieceMoves (Piece player Pawn) =
+getPieceOffsets :: Piece -> PieceOffsets
+getPieceOffsets (Piece player Pawn) =
   PieceOffsets
     { pieceSquareOffsets =
         [ SquareOffset (1 * factor) 0
@@ -32,14 +31,14 @@ getPieceMoves (Piece player Pawn) =
   factor = playerFactor player
   playerFactor White = 1
   playerFactor Black = -1
-getPieceMoves (Piece _ pieceType) = getPieceMoves' pieceType
+getPieceOffsets (Piece _ pieceType) = getPieceOffsets' pieceType
  where
-  getPieceMoves' Bishop = PieceOffsets{pieceSquareOffsets = diagonalOffsets, repeatability = Many}
-  getPieceMoves' Rook = PieceOffsets{pieceSquareOffsets = cardinalOffsets, repeatability = Many}
-  getPieceMoves' Knight = PieceOffsets{pieceSquareOffsets = knightOffsets, repeatability = Once}
-  getPieceMoves' Queen = PieceOffsets{pieceSquareOffsets = cardinalOffsets ++ diagonalOffsets, repeatability = Many}
-  getPieceMoves' King = PieceOffsets{pieceSquareOffsets = cardinalOffsets ++ diagonalOffsets, repeatability = Once}
-  getPieceMoves' Pawn = error "Pawn should be matched earlier"
+  getPieceOffsets' Bishop = PieceOffsets{pieceSquareOffsets = diagonalOffsets, repeatability = Many}
+  getPieceOffsets' Rook = PieceOffsets{pieceSquareOffsets = cardinalOffsets, repeatability = Many}
+  getPieceOffsets' Knight = PieceOffsets{pieceSquareOffsets = knightOffsets, repeatability = Once}
+  getPieceOffsets' Queen = PieceOffsets{pieceSquareOffsets = cardinalOffsets ++ diagonalOffsets, repeatability = Many}
+  getPieceOffsets' King = PieceOffsets{pieceSquareOffsets = cardinalOffsets ++ diagonalOffsets, repeatability = Once}
+  getPieceOffsets' Pawn = error "Pawn should be matched earlier"
 
   cardinalOffsets = [SquareOffset 1 0, SquareOffset 0 1, SquareOffset (-1) 0, SquareOffset 0 (-1)]
   diagonalOffsets = [SquareOffset 1 1, SquareOffset (-1) 1, SquareOffset (-1) (-1), SquareOffset 1 (-1)]

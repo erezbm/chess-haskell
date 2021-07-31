@@ -19,7 +19,7 @@ gameLoop isAscii size = loop initialGameState
     case mbMove of
       Nothing -> putStrLn "Invalid move" >> loop gameState
       Just (move, _) ->
-        case applyMove move gameState of
+        case tryMakeMove gameState move of
           Just nextGameState -> loop nextGameState
           Nothing -> putStrLn "Invalid move" >> loop gameState
 

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 93c57c4ef2150deb32aed5264583ae81094cd8c3d9c3e0f39eb4d19150306b21
+-- hash: 7bf28ac38286cfbb24efb1b65ccfb87ac0de4b153742e0731ad7cdc8b7ec4d98
 
 name:           chess
 version:        0.1.0.0
@@ -24,7 +24,8 @@ executable chess
       Chess.Core.Models.Player
       Chess.Core.Models.Square
       Chess.Core.MoveConstraint
-      Chess.Core.MoveConstraints.ValidMoves
+      Chess.Core.MoveConstraints.Legal
+      Chess.Core.MoveConstraints.PieceOffsets
       Chess.UI.Terminal.Board
       Chess.UI.Terminal.GameLoop
       Chess.UI.Terminal.Piece

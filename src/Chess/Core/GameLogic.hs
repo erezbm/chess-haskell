@@ -1,24 +1,13 @@
 module Chess.Core.GameLogic where
 
 import Chess.Core.Models
-import Chess.Core.MoveConstraints.ValidMoves
-import Control.Monad
-import Data.Function
-import Data.Maybe
+import Chess.Core.MoveConstraints.Legal
 import Utils
 
-applyMove :: Move -> GameState -> Maybe GameState
-applyMove move@(Move source dest) gameState = do
-  let possibleDests = possibleDestSquares gameState source
-  boolToMaybe (dest `elem` possibleDests) $ applyMove' move gameState
+tryMakeMove :: GameState -> Move -> Maybe GameState
+tryMakeMove gameState move@(Move source dest) =
+  let isLegal = not . null $ legalMC gameState source [dest]
+   in boolToMaybe isLegal $ makeMove gameState move
 
-possibleDestSquares :: GameState -> Square -> [Square]
-possibleDestSquares gameState source = do
-  piece <- getPiece source (board gameState) & maybeToList
-  guard $ piecePlayer piece == turn gameState
-  allSquares
-    & validMovesMoveConstraint source piece
-    & undefined
-
-applyMove' :: Move -> GameState -> GameState
-applyMove' = undefined
+makeMove :: GameState -> Move -> GameState
+makeMove = undefined
