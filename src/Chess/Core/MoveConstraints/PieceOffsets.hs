@@ -2,13 +2,12 @@ module Chess.Core.MoveConstraints.PieceOffsets (pieceOffsetsMC) where
 
 import Chess.Core.Models
 import Chess.Core.MoveConstraint
+import Data.List
 import Data.Maybe
 import Utils
 
 pieceOffsetsMC :: Piece -> Square -> MoveConstraint
-pieceOffsetsMC piece source = filter (`elem` validDests)
- where
-  validDests = applyPieceOffsets (getPieceOffsets piece) source
+pieceOffsetsMC piece = flip intersect . applyPieceOffsets (getPieceOffsets piece)
 
 applyPieceOffsets :: PieceOffsets -> Square -> [Square]
 applyPieceOffsets (PieceOffsets squareOffsets Once) source = catMaybes (($ source) . applySquareOffset <$> squareOffsets)
