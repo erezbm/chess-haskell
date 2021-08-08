@@ -8,7 +8,7 @@ import Data.Maybe
 import Utils
 
 leapOverMC :: Board -> Piece -> Square -> MoveConstraint
-leapOverMC board piece@(Piece piecePlayer pieceType) source =
+leapOverMC board piece source =
   let PieceOffsets squareOffsets repeatability = getPieceOffsets piece
       isEmpty square = isNothing $ getPiece square board
       go = flip intersect $ do
