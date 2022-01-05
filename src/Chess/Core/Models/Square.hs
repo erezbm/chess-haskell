@@ -7,11 +7,13 @@ import Data.Array
 import Data.Maybe
 import Utils
 
--- Rank (aka row) 1, File (aka column) 1 is the white rook on the white queens side
+-- Rank (aka row) 1, File (aka column) 1 is the white rook on the white queens side (bottom left when white is in bottom)
 -- https://cdn.discordapp.com/attachments/518448953512165387/857713363139821608/unknown.png
 
+-- |Rank represents a row, rank index 0 in algebraic notation is "1" (the bottom row when white is in bottom)
 newtype Rank = Rank {rankIndex :: Int} deriving (Eq, Ord, Enum, Ix, Show)
 
+-- |File represents a column, file index 0 in algebraic notation is "a" (the left column when white is in bottom)
 newtype File = File {fileIndex :: Int} deriving (Eq, Ord, Enum, Ix, Show)
 
 instance Bounded Rank where

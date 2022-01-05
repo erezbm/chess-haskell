@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ab369d525070d7677ae7f4090a3af5e91ba4fd12a89c2c9c1d97995bcae346ac
+-- hash: a667be9fe43480c20a6adb87a202674b2b2f83d95f109084fdea2bdd316cf917
 
 name:           chess
 version:        0.1.0.0
@@ -33,6 +33,8 @@ executable chess
       Chess.UI.Terminal.GameLoop
       Chess.UI.Terminal.Piece
       Chess.UI.Terminal.Player
+      Parsing.Combinator
+      Parsing.Parser
       Utils
       Paths_chess
   hs-source-dirs:

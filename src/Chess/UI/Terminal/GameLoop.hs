@@ -5,8 +5,11 @@ module Chess.UI.Terminal.GameLoop where
 import Chess.Core.GameLogic
 import Chess.Core.Models
 import Chess.UI.Terminal.Board
-import Data.Char
-import System.IO
+import Control.Applicative (liftA2, many)
+import Parsing.Combinator (anyChar, eof, space)
+import Parsing.Parser (Parser, parse)
+import System.IO (hFlush, stdout)
+import Utils (fmapMaybe)
 
 gameLoop :: Bool -> Int -> IO ()
 gameLoop isAscii size = loop initialGameState
@@ -15,30 +18,25 @@ gameLoop isAscii size = loop initialGameState
     displayBoard isAscii size $ board gameState
     putStr "Enter move: "
     hFlush stdout
-    mbMove <- parseMove <$> getLine
+    mbMove <- parse lineParser <$> getLine
     case mbMove of
-      Nothing -> putStrLn "Invalid move" >> loop gameState
-      Just (move, _) ->
+      Nothing -> putStrLn "Parse error (example move: \"a1 b3\")" >> loop gameState
+      Just move ->
         case tryMakeMove gameState move of
           Just nextGameState -> loop nextGameState
-          Nothing -> putStrLn "Invalid move" >> loop gameState
+          Nothing -> putStrLn "Illegal move" >> loop gameState
 
-parseMove :: String -> Maybe (Move, String)
-parseMove s = do
-  (moveSource, s') <- parseSquare s
-  (moveDest, s'') <- parseSquare (dropWhile isSpace s')
-  return (Move moveSource moveDest, s'')
+lineParser :: Parser Move
+lineParser = moveParser <* eof
 
-parseSquare :: String -> Maybe (Square, String)
-parseSquare s = do
-  (file, s') <- parseFile s
-  (rank, s'') <- parseRank s'
-  return (mkSquare rank file, s'')
+moveParser :: Parser Move
+moveParser = liftA2 Move squareParser (many space *> squareParser)
 
-parseRank :: String -> Maybe (Rank, String)
-parseRank (c : s) = (,s) <$> lookup (digitToInt c) ([1 ..] `zip` allRanks)
-parseRank _ = Nothing
+squareParser :: Parser Square
+squareParser = liftA2 (flip mkSquare) fileParser rankParser
 
-parseFile :: String -> Maybe (File, String)
-parseFile (c : s) = (,s) <$> lookup (toLower c) (['a' ..] `zip` allFiles)
-parseFile _ = Nothing
+rankParser :: Parser Rank
+rankParser = fmapMaybe (flip lookup $ ['1' ..] `zip` allRanks) anyChar
+
+fileParser :: Parser File
+fileParser = fmapMaybe (flip lookup $ ['a' ..] `zip` allFiles) anyChar
