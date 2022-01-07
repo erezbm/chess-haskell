@@ -1,30 +1,27 @@
-{-# LANGUAGE TupleSections #-}
+{-# OPTIONS_GHC -Wno-orphans #-}
 
-module Chess.UI.Terminal.GameLoop where
+module Chess.UI.Terminal.UI where
 
-import Chess.Core.GameLogic
+import Chess.Core.GameLoop (UI (..))
 import Chess.Core.Models
-import Chess.UI.Terminal.Board
+import Chess.UI.Terminal.Board (displayBoard)
+import Chess.UI.Terminal.TerminalUI (TerminalUI)
 import Control.Applicative (liftA2, many)
+import Control.Monad (when)
 import Parsing.Combinator (anyChar, eof, space)
 import Parsing.Parser (Parser, parse)
 import System.IO (hFlush, stdout)
 import Utils (fmapMaybe)
 
-gameLoop :: Bool -> Int -> IO ()
-gameLoop isAscii size = loop initialGameState
- where
-  loop gameState = do
-    displayBoard isAscii size $ board gameState
+instance UI TerminalUI where
+  sendGameStarted = sendGameState
+  requestMove _ _ = do
     putStr "Enter move: "
     hFlush stdout
-    mbMove <- parse lineParser <$> getLine
-    case mbMove of
-      Nothing -> putStrLn "Parse error (example move: \"a1 b3\")" >> loop gameState
-      Just move ->
-        case tryMakeMove gameState move of
-          Just nextGameState -> loop nextGameState
-          Nothing -> putStrLn "Illegal move" >> loop gameState
+    parse lineParser <$> getLine
+  sendGameState ui p gameState = when (p == White) $ displayBoard ui (board gameState)
+  sendRequestMoveFailedError _ _ = putStrLn "Parse error (example move: \"a1 b3\")"
+  sendIllegalMoveError _ _ = putStrLn "Illegal move"
 
 lineParser :: Parser Move
 lineParser = moveParser <* eof

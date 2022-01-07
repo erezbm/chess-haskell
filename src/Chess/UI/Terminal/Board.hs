@@ -2,6 +2,7 @@ module Chess.UI.Terminal.Board where
 
 import Chess.Core.Models
 import Chess.UI.Terminal.Piece
+import Chess.UI.Terminal.TerminalUI
 import Data.Foldable
 import Data.List
 import Data.String
@@ -13,8 +14,8 @@ data TileDisplay = TileDisplay {tileColor :: TileColor, mbPiece :: Maybe Piece}
 type TileChunks = [Chunk]
 newtype RankChunks = RankChunks [[Chunk]]
 
-tileToChunks :: Bool -> Int -> TileDisplay -> TileChunks
-tileToChunks isAscii size (TileDisplay tileColor mbPiece) =
+tileToChunks :: TerminalUI -> TileDisplay -> TileChunks
+tileToChunks (TerminalUI isAscii size) (TileDisplay tileColor mbPiece) =
   let rows = 2 * size - 1
       columns = 2 * rows
       background = back $ tileColorRadiant tileColor
@@ -31,13 +32,13 @@ tilesToRankChunks = RankChunks . transpose
 displayRankChunks :: RankChunks -> IO ()
 displayRankChunks (RankChunks chunks) = traverse_ putChunksLn chunks
 
-displayBoard :: Bool -> Int -> Board -> IO ()
-displayBoard isAscii size board = for_ (reverse allRanks) displayRank
+displayBoard :: TerminalUI -> Board -> IO ()
+displayBoard ui board = for_ (reverse allRanks) displayRank
  where
   displayRank rank = displayRankChunks $ tilesToRankChunks tileChunks
    where
     rowChunks = map (\(square, mbPiece) -> TileDisplay (squareTileColor square) mbPiece) (getRankPieces board rank)
-    tileChunks = map (tileToChunks isAscii size) rowChunks
+    tileChunks = map (tileToChunks ui) rowChunks
 
 squareTileColor :: Square -> TileColor
 squareTileColor (Rank rankIndex, File fileIndex)

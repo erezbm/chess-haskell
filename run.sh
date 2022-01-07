@@ -1,2 +1,1 @@
-stack build
-stack run -- $@
+stack build && stack run -- $@

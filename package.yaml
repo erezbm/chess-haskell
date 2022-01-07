@@ -9,4 +9,8 @@ dependencies:
 executable:
   main: Main.hs
   source-dirs: src
-  ghc-options: [-XOverloadedStrings]
+  ghc-options:
+    - -XOverloadedStrings
+    - -Wall
+    - -Werror
+    - -Wno-name-shadowing

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: a667be9fe43480c20a6adb87a202674b2b2f83d95f109084fdea2bdd316cf917
+-- hash: 066a7951718494bf0278d9b39c283596e32ebe6f79426903c96487dd80b65242
 
 name:           chess
 version:        0.1.0.0
@@ -16,6 +16,7 @@ executable chess
   main-is: Main.hs
   other-modules:
       Chess.Core.GameLogic
+      Chess.Core.GameLoop
       Chess.Core.Models
       Chess.Core.Models.Board
       Chess.Core.Models.GameState
@@ -30,16 +31,17 @@ executable chess
       Chess.Core.MoveConstraints.PieceOffsets
       Chess.Core.MoveConstraints.Turn
       Chess.UI.Terminal.Board
-      Chess.UI.Terminal.GameLoop
       Chess.UI.Terminal.Piece
       Chess.UI.Terminal.Player
+      Chess.UI.Terminal.TerminalUI
+      Chess.UI.Terminal.UI
       Parsing.Combinator
       Parsing.Parser
       Utils
       Paths_chess
   hs-source-dirs:
       src
-  ghc-options: -XOverloadedStrings
+  ghc-options: -XOverloadedStrings -Wall -Werror -Wno-name-shadowing
   build-depends:
       array
     , base >=4.7 && <5
