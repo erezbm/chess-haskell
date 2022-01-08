@@ -17,6 +17,9 @@ getFilePieces (Board a) file = filter ((== file) . squareFile . fst) $ assocs a
 getPiece :: Square -> Board -> Maybe Piece
 getPiece square (Board a) = a ! square
 
+setPiece :: Maybe Piece -> Square -> Board -> Board
+setPiece piece square (Board a) = Board (a // [(square, piece)])
+
 initialBoard :: Board
 initialBoard = Board $ array (minBound, maxBound) positions
  where
