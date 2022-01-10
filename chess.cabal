@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 066a7951718494bf0278d9b39c283596e32ebe6f79426903c96487dd80b65242
+-- hash: 685848aa2b887263f0b7d6f0abd2307889b91dfdb5f9065403be439473c5d5de
 
 name:           chess
 version:        0.1.0.0
@@ -28,6 +28,7 @@ executable chess
       Chess.Core.MoveConstraint
       Chess.Core.MoveConstraints.LeapOver
       Chess.Core.MoveConstraints.Legal
+      Chess.Core.MoveConstraints.PieceExists
       Chess.Core.MoveConstraints.PieceOffsets
       Chess.Core.MoveConstraints.Turn
       Chess.UI.Terminal.Board
@@ -46,4 +47,5 @@ executable chess
       array
     , base >=4.7 && <5
     , rainbow
+    , transformers
   default-language: Haskell2010

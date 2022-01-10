@@ -4,13 +4,14 @@ module Chess.Core.GameLoop where
 
 import Chess.Core.GameLogic (tryMakeMove)
 import Chess.Core.Models
+import Chess.Core.MoveConstraint (IllegalMoveError)
 
 class UI u where
   sendGameStarted :: u -> Player -> GameState -> IO ()
   requestMove :: u -> Player -> IO (Maybe Move)
   sendGameState :: u -> Player -> GameState -> IO ()
   sendRequestMoveFailedError :: u -> Player -> IO ()
-  sendIllegalMoveError :: u -> Player -> IO ()
+  sendIllegalMoveError :: u -> Player -> IllegalMoveError -> IO ()
 
 gameLoop :: (UI a) => a -> IO ()
 gameLoop ui = do
@@ -25,10 +26,10 @@ gameLoop ui = do
       Nothing -> sendRequestMoveFailedError ui currentPlayer >> loop gameState
       Just move ->
         case tryMakeMove gameState move of
-          Just nextGameState -> do
+          Right nextGameState -> do
             sendGameState ui currentPlayer nextGameState
             sendGameState ui (opponent currentPlayer) nextGameState
             loop nextGameState
-          Nothing -> do
-            sendIllegalMoveError ui currentPlayer
+          Left e -> do
+            sendIllegalMoveError ui currentPlayer e
             loop gameState

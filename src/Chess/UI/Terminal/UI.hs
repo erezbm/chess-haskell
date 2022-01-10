@@ -21,7 +21,7 @@ instance UI TerminalUI where
     parse lineParser <$> getLine
   sendGameState ui p gameState = when (p == White) $ displayBoard ui (board gameState)
   sendRequestMoveFailedError _ _ = putStrLn "Parse error (example move: \"a1 b3\")"
-  sendIllegalMoveError _ _ = putStrLn "Illegal move"
+  sendIllegalMoveError _ _ e = putStrLn ("Illegal move: " ++ show e)
 
 lineParser :: Parser Move
 lineParser = moveParser <* eof

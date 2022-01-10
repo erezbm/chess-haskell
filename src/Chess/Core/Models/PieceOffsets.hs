@@ -8,7 +8,7 @@ import Utils
 
 data SquareOffset = SquareOffset {rankOffset :: Int, fileOffset :: Int}
 
-data Repeatability = Once | Many
+data Repeatability = Once | Many deriving (Eq)
 
 data PieceOffsets = PieceOffsets {pieceSquareOffsets :: [SquareOffset], repeatability :: Repeatability}
 
