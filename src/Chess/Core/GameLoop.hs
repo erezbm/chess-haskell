@@ -4,7 +4,7 @@ module Chess.Core.GameLoop where
 
 import Chess.Core.GameLogic (tryMakeMove)
 import Chess.Core.Models
-import Chess.Core.MoveConstraint (IllegalMoveError)
+import Chess.Core.ChessRule (IllegalMoveError)
 
 class UI u where
   sendGameStarted :: u -> Player -> GameState -> IO ()

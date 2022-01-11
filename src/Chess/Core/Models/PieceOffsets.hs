@@ -16,17 +16,17 @@ getPieceOffsets :: Piece -> PieceOffsets
 getPieceOffsets (Piece player Pawn) =
   PieceOffsets
     { pieceSquareOffsets =
-        [ SquareOffset (1 * factor) 0
-        , SquareOffset (2 * factor) 0
-        , SquareOffset (1 * factor) 1
-        , SquareOffset (1 * factor) (-1)
+        [ SquareOffset (1 * direction) 0
+        , SquareOffset (2 * direction) 0
+        , SquareOffset (1 * direction) 1
+        , SquareOffset (1 * direction) (-1)
         ]
     , repeatability = Once
     }
  where
-  factor = playerFactor player
-  playerFactor White = 1
-  playerFactor Black = -1
+  direction = playerDirection player
+  playerDirection White = 1
+  playerDirection Black = -1
 getPieceOffsets (Piece _ pieceType) = getPieceOffsets' pieceType
  where
   getPieceOffsets' Bishop = PieceOffsets{pieceSquareOffsets = diagonalOffsets, repeatability = Many}

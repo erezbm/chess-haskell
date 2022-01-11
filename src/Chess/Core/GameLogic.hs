@@ -1,13 +1,13 @@
 module Chess.Core.GameLogic where
 
 import Chess.Core.Models
-import Chess.Core.MoveConstraint (IllegalMoveError, runMoveConstraint)
-import Chess.Core.MoveConstraints.Legal (legalMC)
+import Chess.Core.ChessRule (IllegalMoveError, checkChessRule)
+import Chess.Core.ChessRules.Legal (legalCR)
 import Data.Functor ((<&>))
 
 tryMakeMove :: GameState -> Move -> Either IllegalMoveError GameState
 tryMakeMove gameState move@(Move source dest) = do
-  runMoveConstraint legalMC gameState (Move source dest)
+  checkChessRule legalCR gameState (Move source dest)
   return (makeMove gameState move)
 
 makeMove :: GameState -> Move -> GameState

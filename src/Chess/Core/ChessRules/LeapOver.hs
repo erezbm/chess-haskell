@@ -1,22 +1,20 @@
-module Chess.Core.MoveConstraints.LeapOver (leapOverMC) where
+module Chess.Core.ChessRules.LeapOver (leapOverCR) where
 
 import Chess.Core.Models
-import Chess.Core.MoveConstraint (IllegalMoveError (PathBlockedError), MoveConstraint, errorMC)
-import Chess.Core.MoveConstraints.PieceExists (pieceExistsMC)
+import Chess.Core.ChessRule (IllegalMoveError (PathBlockedError), ChessRule, askGameState, askMove, errorCR)
+import Chess.Core.ChessRules.PieceExists (pieceExistsCR)
 import Control.Monad (mfilter, unless, when)
-import Control.Monad.Trans.Class (lift)
-import Control.Monad.Trans.Reader (ask)
 import Data.Maybe (isNothing)
 import Utils (generateList)
 
-leapOverMC :: MoveConstraint ()
-leapOverMC = do
-  piece <- pieceExistsMC
+leapOverCR :: ChessRule ()
+leapOverCR = do
+  piece <- pieceExistsCR
   let PieceOffsets squareOffsets repeatability = getPieceOffsets piece
-  gameState <- ask
-  Move source to <- lift ask
+  gameState <- askGameState
+  Move source to <- askMove
   when (repeatability == Many) $
-    unless (to `elem` validDests gameState squareOffsets source) (errorMC PathBlockedError)
+    unless (to `elem` validDests gameState squareOffsets source) (errorCR PathBlockedError)
  where
   validDests :: GameState -> [SquareOffset] -> Square -> [Square]
   validDests gameState squareOffsets source = do
