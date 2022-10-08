@@ -4,9 +4,14 @@ import Chess.Core.Models.Piece
 import Chess.Core.Models.Player
 import Chess.Core.Models.Square
 import Data.Array
+import Data.Coerce
 
-{-# ANN Board ("HLint: ignore Use newtype instead of data" :: String) #-}
-data Board = Board (Array Square (Maybe Piece)) deriving (Show)
+newtype Board = Board (Array Square (Maybe Piece)) deriving (Show)
+
+data BoardSide = QueenSide | KingSide
+
+getAllPieces :: Board -> [(Square, Maybe Piece)]
+getAllPieces = assocs . coerce
 
 getRankPieces :: Board -> Rank -> [(Square, Maybe Piece)]
 getRankPieces (Board a) rank = filter ((== rank) . squareRank . fst) $ assocs a
@@ -14,8 +19,8 @@ getRankPieces (Board a) rank = filter ((== rank) . squareRank . fst) $ assocs a
 getFilePieces :: Board -> File -> [(Square, Maybe Piece)]
 getFilePieces (Board a) file = filter ((== file) . squareFile . fst) $ assocs a
 
-getPiece :: Square -> Board -> Maybe Piece
-getPiece square (Board a) = a ! square
+getPiece :: Board -> Square -> Maybe Piece
+getPiece = (!) . coerce
 
 setPiece :: Maybe Piece -> Square -> Board -> Board
 setPiece piece square (Board a) = Board (a // [(square, piece)])
@@ -41,3 +46,17 @@ initialBoard = Board $ array (minBound, maxBound) positions
 
   emptyRankPieces :: [Maybe Piece]
   emptyRankPieces = replicate (length allFiles) Nothing
+
+playerDirection :: Num a => Player -> a
+playerDirection White = 1
+playerDirection Black = -1
+
+initialKingSquare :: Player -> Square
+initialKingSquare White = mkSquare minBound (mkFile 4)
+initialKingSquare Black = mkSquare maxBound (mkFile 4)
+
+initialRookSquare :: Player -> BoardSide -> Square
+initialRookSquare White KingSide = mkSquare minBound maxBound
+initialRookSquare White QueenSide = mkSquare minBound minBound
+initialRookSquare Black KingSide = mkSquare maxBound maxBound
+initialRookSquare Black QueenSide = mkSquare maxBound minBound

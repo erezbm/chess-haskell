@@ -6,6 +6,7 @@ import Control.Applicative
 import Data.Array
 import Data.Maybe
 import Utils
+import Utils.Point
 
 -- Rank (aka row) 1, File (aka column) 1 is the white rook on the white queens side (bottom left when white is in bottom)
 -- https://cdn.discordapp.com/attachments/518448953512165387/857713363139821608/unknown.png
@@ -24,7 +25,11 @@ instance Bounded File where
   minBound = File 0
   maxBound = File 7
 
+-- The order is important for range
 type Square = (Rank, File)
+
+squareToPoint :: Square -> Point Int
+squareToPoint (rank, file) = Point (rankIndex rank) (fileIndex file)
 
 mkMbRank :: Int -> Maybe Rank
 mkMbRank = filterMaybe (inRange (minBound, maxBound)) . Rank

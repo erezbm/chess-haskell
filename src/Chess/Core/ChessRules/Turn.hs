@@ -5,8 +5,9 @@ import Chess.Core.ChessRule (IllegalMoveError (OpponentPieceError), ChessRule, a
 import Chess.Core.ChessRules.PieceExists (pieceExistsCR)
 import Control.Monad (unless)
 
-turnCR :: ChessRule ()
+turnCR :: ChessRule (Piece, Player)
 turnCR = do
   piece <- pieceExistsCR
   gameState <- askGameState
   unless (turn gameState == piecePlayer piece) (errorCR OpponentPieceError)
+  return (piece, turn gameState)

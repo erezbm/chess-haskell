@@ -1,12 +1,12 @@
-module Chess.Core.ChessRules.PieceOffsets (pieceOffsetsCR) where
+module Chess.Core.ChessRules.BasicMove where
 
 import Chess.Core.Models
 import Chess.Core.ChessRule (IllegalMoveError (PieceTypeDestError), ChessRule, askMove, errorCR)
 import Chess.Core.ChessRules.PieceExists (pieceExistsCR)
 import Control.Monad (unless)
 
-pieceOffsetsCR :: ChessRule ()
-pieceOffsetsCR = do
+basicMoveCR :: ChessRule ()
+basicMoveCR = do
   piece <- pieceExistsCR
   Move from to <- askMove
-  unless (to `elem` applyPieceOffsets (getPieceOffsets piece) from) (errorCR PieceTypeDestError)
+  unless (to `elem` applyPieceOffsets (getPieceBasicOffsets piece) from) (errorCR PieceTypeDestError)

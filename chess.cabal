@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: fe8cf17fe72f2dccc88e09659dbc9cc44384011d051012019460a8ac268189c7
+-- hash: 72134c5ae71537d7da6d1436a23d2a71c4de839e4a4f81d9ad8bd294275d06b7
 
 name:           chess
 version:        0.1.0.0
@@ -16,13 +16,17 @@ executable chess
   main-is: Main.hs
   other-modules:
       Chess.Core.ChessRule
-      Chess.Core.ChessRules.LeapOver
+      Chess.Core.ChessRules.BasicMove
+      Chess.Core.ChessRules.Castling
       Chess.Core.ChessRules.Legal
+      Chess.Core.ChessRules.PathBlocked
+      Chess.Core.ChessRules.PawnLeap
       Chess.Core.ChessRules.PieceExists
-      Chess.Core.ChessRules.PieceOffsets
       Chess.Core.ChessRules.Turn
       Chess.Core.GameLogic
       Chess.Core.GameLoop
+      Chess.Core.LegalDestinations
+      Chess.Core.MakeMove
       Chess.Core.Models
       Chess.Core.Models.Board
       Chess.Core.Models.GameState
@@ -31,6 +35,7 @@ executable chess
       Chess.Core.Models.PieceOffsets
       Chess.Core.Models.Player
       Chess.Core.Models.Square
+      Chess.Core.Threatening
       Chess.UI.Terminal.Board
       Chess.UI.Terminal.Piece
       Chess.UI.Terminal.Player
@@ -39,6 +44,7 @@ executable chess
       Parsing.Combinator
       Parsing.Parser
       Utils
+      Utils.Point
       Paths_chess
   hs-source-dirs:
       src

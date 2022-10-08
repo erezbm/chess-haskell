@@ -16,6 +16,8 @@ data IllegalMoveError
   | OpponentPieceError
   | PathBlockedError
   | PieceTypeDestError
+  | PawnLeapError
+  | CastlingError
   deriving (Show)
 
 errorCR :: IllegalMoveError -> ChessRule a

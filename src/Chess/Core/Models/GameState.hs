@@ -1,26 +1,17 @@
-module Chess.Core.Models.GameState (
-  Result,
-  GameStatus,
-  CastlingEligiblity,
-  GameState,
-  board,
-  turn,
-  playerStates,
-  lastPawnLeap,
-  status,
-  initialGameState,
-  nextTurn,
-) where
+{-# LANGUAGE NamedFieldPuns #-}
+
+module Chess.Core.Models.GameState where
 
 import Chess.Core.Models.Board
 import Chess.Core.Models.Player
 import Chess.Core.Models.Square
+import Data.Maybe
 
 data Result' = Tie' | Win' deriving (Show)
 
 data GameStatus' = GameInProgress' | GameOver' Result' deriving (Show)
 
-data CastlingEligiblity = NoneEligible | QueenSideEligible | KingSideEligible | BothEligible deriving (Show)
+data CastlingEligiblity = NoneEligible | QueenSideEligible | KingSideEligible | BothEligible deriving (Show, Eq)
 
 data GameState = GameState
   { board :: Board
@@ -45,6 +36,9 @@ status state = untagStatus $ status' state
 
 nextTurn :: GameState -> Player
 nextTurn = opponent . turn
+
+getPlayerState :: GameState -> Player -> CastlingEligiblity
+getPlayerState GameState{playerStates} player = fromJust $ lookup player playerStates
 
 initialGameState :: GameState
 initialGameState = GameState initialBoard White initialStates Nothing GameInProgress'
