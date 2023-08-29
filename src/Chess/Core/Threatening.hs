@@ -17,7 +17,7 @@ pieceThreatenedSquares board source = do
   let squares = generateList (applySquareOffset offset) source
   let isEmpty square = isNothing $ getPiece board square
   let empties = takeWhile isEmpty squares
-  let n = if repeatability == Many then length empties else 0
+  let n = if repeatability == Infinite then length empties else 0
   let squares' = take (n + 1) squares
   let lastMbPiece = safeLast squares' >>= getPiece board
   let takeLast = case lastMbPiece of
