@@ -7,7 +7,6 @@ import Chess.Core.Models
 
 import Chess.Core.LegalDestinations
 import Chess.Core.MakeMove
-import Data.Functor
 import Utils
 
 tryMakeMove :: GameState -> Move -> Maybe GameState
